@@ -383,10 +383,27 @@ void StandardThread::stopThread(void) noexcept
 	//			return;
 	//	}
 	//#else
-	while (isAlive())
-		xsYield();
+	// while (isAlive())
+	// 	xsYield();
 	//#endif
-	if (pthread_join(m_thread, NULL))
+
+	// NOTE: Fixed, as per:
+	// https://github.com/bluespace-ai/bluespace_ai_xsens_ros_mti_driver/pull/17
+	int rv = 0;
+	while (true) {
+		rv = pthread_tryjoin_np(m_thread, NULL);
+		if (rv == 0) {
+			break;
+		}
+		if (errno == EBUSY) {
+			xsYield();
+		} else {
+			// Some other error--maybe the thread is invalid?
+			break;
+		}
+	}
+
+	if (rv != 0)
 	{
 		switch (errno)
 		{
