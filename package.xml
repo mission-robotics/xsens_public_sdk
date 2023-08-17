@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>xsens_public_sdk</name>
+  <version>0.0.1</version>
+  <description>Public SDK for Xsens MTI AHRS modules</description>
+  <maintainer email="charles@missionrobotics.us">Charles Cross</maintainer>
+  <license>BSD3</license>
+
+  <depend>libusb-dev</depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>
