@@ -381,17 +381,17 @@ bool BroadcastDevice::abortFlushing()
 
 bool BroadcastDevice::isMeasuring() const
 {
-	return ForwardConstFunc(const_cast<BroadcastDevice* const>(this), &XsDevice::isMeasuring)();
+	return ForwardConstFunc(const_cast<BroadcastDevice*>(this), &XsDevice::isMeasuring)();
 }
 
 bool BroadcastDevice::isRecording() const
 {
-	return ForwardConstFunc(const_cast<BroadcastDevice* const>(this), &XsDevice::isRecording)();
+	return ForwardConstFunc(const_cast<BroadcastDevice*>(this), &XsDevice::isRecording)();
 }
 
 bool BroadcastDevice::isReadingFromFile() const
 {
-	return ForwardConstFunc(const_cast<BroadcastDevice* const>(this), &XsDevice::isReadingFromFile)();
+	return ForwardConstFunc(const_cast<BroadcastDevice*>(this), &XsDevice::isReadingFromFile)();
 }
 
 bool BroadcastDevice::gotoConfig()

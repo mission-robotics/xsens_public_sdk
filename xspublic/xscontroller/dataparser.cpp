@@ -151,7 +151,7 @@ int32_t DataParser::innerFunction()
 void DataParser::initFunction()
 {
 	setPriority(XS_THREAD_PRIORITY_HIGH);
-	sprintf(m_parserType, "XDA %s %p", parserType(), this);
+	sprintf(m_parserType, "XDA %s %p", parserType(), reinterpret_cast<void*>(this));
 	//JLDEBUGG("Thread " << this << " " << buffer);
 	xsNameThisThread(m_parserType);
 }

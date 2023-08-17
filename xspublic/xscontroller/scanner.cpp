@@ -545,7 +545,7 @@ bool Scanner::xsEnumerateSerialPorts(XsPortInfoArray& ports, bool ignoreNonXsens
 				deviceidstring = xsudev.device_get_sysattr_value(usbParentDevice, "serial");
 				if (deviceidstring)
 				{
-					int deviceId = 0;
+					uint32_t deviceId = 0;
 					sscanf(deviceidstring, "%08X", &deviceId);
 					portInfo.setDeviceId(deviceId);
 				}

@@ -325,18 +325,18 @@ void XsMatrix_fromQuaternion(XsMatrix* thisPtr, const XsQuaternion* quat)
 		return;
 	}
 
-	q00 = quat->m_w * quat->m_w;
-	q11 = quat->m_x * quat->m_x;
-	q22 = quat->m_y * quat->m_y;
-	q33 = quat->m_z * quat->m_z;
+	q00 = quat->m_comp.m_w * quat->m_comp.m_w;
+	q11 = quat->m_comp.m_x * quat->m_comp.m_x;
+	q22 = quat->m_comp.m_y * quat->m_comp.m_y;
+	q33 = quat->m_comp.m_z * quat->m_comp.m_z;
 
-	q01 = quat->m_w * quat->m_x;
-	q02 = quat->m_w * quat->m_y;
-	q03 = quat->m_w * quat->m_z;
+	q01 = quat->m_comp.m_w * quat->m_comp.m_x;
+	q02 = quat->m_comp.m_w * quat->m_comp.m_y;
+	q03 = quat->m_comp.m_w * quat->m_comp.m_z;
 
-	q12 = quat->m_x * quat->m_y;
-	q13 = quat->m_x * quat->m_z;
-	q23 = quat->m_y * quat->m_z;
+	q12 = quat->m_comp.m_x * quat->m_comp.m_y;
+	q13 = quat->m_comp.m_x * quat->m_comp.m_z;
+	q23 = quat->m_comp.m_y * quat->m_comp.m_z;
 
 	XsMatrix_assign(thisPtr, 3, 3, 3, 0, 0);
 

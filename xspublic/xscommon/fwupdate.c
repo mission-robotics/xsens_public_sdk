@@ -408,7 +408,9 @@ void FwUpdate_handleXbus(FwUpdate* thisPtr, uint8_t const* xbusMessage)
 				thisPtr->m_state = STATE_WaitReady;
 			}
 			else
+			{
 				LOG("Fwu: Got %s in STATE_Start (ignored)\n", ackToString(ack));
+			}
 			break;
 		}
 

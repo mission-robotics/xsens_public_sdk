@@ -84,16 +84,16 @@
 */
 void XsQuaternion_destruct(XsQuaternion* thisPtr)
 {
-	thisPtr->m_w = XsMath_zero;
-	thisPtr->m_x = XsMath_zero;
-	thisPtr->m_y = XsMath_zero;
-	thisPtr->m_z = XsMath_zero;
+	thisPtr->m_comp.m_w = XsMath_zero;
+	thisPtr->m_comp.m_x = XsMath_zero;
+	thisPtr->m_comp.m_y = XsMath_zero;
+	thisPtr->m_comp.m_z = XsMath_zero;
 }
 
 /*! \relates XsQuaternion \brief Test if this is a null object. */
 int XsQuaternion_empty(const XsQuaternion* thisPtr)
 {
-	return thisPtr->m_w == XsMath_zero && thisPtr->m_x == XsMath_zero && thisPtr->m_y == XsMath_zero && thisPtr->m_z == XsMath_zero;
+	return thisPtr->m_comp.m_w == XsMath_zero && thisPtr->m_comp.m_x == XsMath_zero && thisPtr->m_comp.m_y == XsMath_zero && thisPtr->m_comp.m_z == XsMath_zero;
 }
 
 /*! \relates XsQuaternion
@@ -112,25 +112,25 @@ void XsQuaternion_invert(XsQuaternion* thisPtr)
 */
 void XsQuaternion_inverse(const XsQuaternion* thisPtr, XsQuaternion* dest)
 {
-	dest->m_w = thisPtr->m_w;
-	dest->m_x = -thisPtr->m_x;
-	dest->m_y = -thisPtr->m_y;
-	dest->m_z = -thisPtr->m_z;
+	dest->m_comp.m_w = thisPtr->m_comp.m_w;
+	dest->m_comp.m_x = -thisPtr->m_comp.m_x;
+	dest->m_comp.m_y = -thisPtr->m_comp.m_y;
+	dest->m_comp.m_z = -thisPtr->m_comp.m_z;
 }
 
 /*! \relates XsQuaternion \brief Create a normalized version of this quaternion
 */
 XsReal XsQuaternion_normalized(const XsQuaternion* thisPtr, XsQuaternion* dest)
 {
-	XsReal divisor, length = sqrt(thisPtr->m_w * thisPtr->m_w + thisPtr->m_x * thisPtr->m_x + thisPtr->m_y * thisPtr->m_y + thisPtr->m_z * thisPtr->m_z);
+	XsReal divisor, length = sqrt(thisPtr->m_comp.m_w * thisPtr->m_comp.m_w + thisPtr->m_comp.m_x * thisPtr->m_comp.m_x + thisPtr->m_comp.m_y * thisPtr->m_comp.m_y + thisPtr->m_comp.m_z * thisPtr->m_comp.m_z);
 	divisor = XsMath_one / length;
-	if (thisPtr->m_w < 0)
+	if (thisPtr->m_comp.m_w < 0)
 		divisor = -divisor;
 
-	dest->m_w = thisPtr->m_w * divisor;
-	dest->m_x = thisPtr->m_x * divisor;
-	dest->m_y = thisPtr->m_y * divisor;
-	dest->m_z = thisPtr->m_z * divisor;
+	dest->m_comp.m_w = thisPtr->m_comp.m_w * divisor;
+	dest->m_comp.m_x = thisPtr->m_comp.m_x * divisor;
+	dest->m_comp.m_y = thisPtr->m_comp.m_y * divisor;
+	dest->m_comp.m_z = thisPtr->m_comp.m_z * divisor;
 
 	return length;
 }
@@ -153,17 +153,17 @@ void XsQuaternion_fromEulerAngles(XsQuaternion* thisPtr, const XsEuler* src)
 		return;
 	}
 
-	cosX = cos(XsMath_pt5 * XsMath_deg2rad(src->m_x));
-	sinX = sin(XsMath_pt5 * XsMath_deg2rad(src->m_x));
-	cosY = cos(XsMath_pt5 * XsMath_deg2rad(src->m_y));
-	sinY = sin(XsMath_pt5 * XsMath_deg2rad(src->m_y));
-	cosZ = cos(XsMath_pt5 * XsMath_deg2rad(src->m_z));
-	sinZ = sin(XsMath_pt5 * XsMath_deg2rad(src->m_z));
+	cosX = cos(XsMath_pt5 * XsMath_deg2rad(src->m_xyz.m_x));
+	sinX = sin(XsMath_pt5 * XsMath_deg2rad(src->m_xyz.m_x));
+	cosY = cos(XsMath_pt5 * XsMath_deg2rad(src->m_xyz.m_y));
+	sinY = sin(XsMath_pt5 * XsMath_deg2rad(src->m_xyz.m_y));
+	cosZ = cos(XsMath_pt5 * XsMath_deg2rad(src->m_xyz.m_z));
+	sinZ = sin(XsMath_pt5 * XsMath_deg2rad(src->m_xyz.m_z));
 
-	thisPtr->m_w = cosX * cosY * cosZ + sinX * sinY * sinZ;
-	thisPtr->m_x = sinX * cosY * cosZ - cosX * sinY * sinZ;
-	thisPtr->m_y = cosX * sinY * cosZ + sinX * cosY * sinZ;
-	thisPtr->m_z = cosX * cosY * sinZ - sinX * sinY * cosZ;
+	thisPtr->m_comp.m_w = cosX * cosY * cosZ + sinX * sinY * sinZ;
+	thisPtr->m_comp.m_x = sinX * cosY * cosZ - cosX * sinY * sinZ;
+	thisPtr->m_comp.m_y = cosX * sinY * cosZ + sinX * cosY * sinZ;
+	thisPtr->m_comp.m_z = cosX * cosY * sinZ - sinX * sinY * cosZ;
 }
 
 /*! \relates XsQuaternion
@@ -202,45 +202,45 @@ void XsQuaternion_fromRotationMatrix(XsQuaternion* thisPtr, const XsMatrix* ori)
 	if (trace * trace >= XsMath_tinyValue)
 	{
 		s = XsMath_two * sqrt(trace);
-		thisPtr->m_w = XsMath_pt25 * s;
+		thisPtr->m_comp.m_w = XsMath_pt25 * s;
 
 		s = XsMath_one / s;
-		thisPtr->m_x = (XsMatrix_value(ori, 1, 2) - XsMatrix_value(ori, 2, 1)) * s;
-		thisPtr->m_y = (XsMatrix_value(ori, 2, 0) - XsMatrix_value(ori, 0, 2)) * s;
-		thisPtr->m_z = (XsMatrix_value(ori, 0, 1) - XsMatrix_value(ori, 1, 0)) * s;
+		thisPtr->m_comp.m_x = (XsMatrix_value(ori, 1, 2) - XsMatrix_value(ori, 2, 1)) * s;
+		thisPtr->m_comp.m_y = (XsMatrix_value(ori, 2, 0) - XsMatrix_value(ori, 0, 2)) * s;
+		thisPtr->m_comp.m_z = (XsMatrix_value(ori, 0, 1) - XsMatrix_value(ori, 1, 0)) * s;
 	}
 	else if ((XsMatrix_value(ori, 0, 0) > XsMatrix_value(ori, 1, 1)) && (XsMatrix_value(ori, 0, 0) > XsMatrix_value(ori, 2, 2)))
 	{
 		trace = XsMath_one + XsMatrix_value(ori, 0, 0) - XsMatrix_value(ori, 1, 1) - XsMatrix_value(ori, 2, 2);
 		s = XsMath_two * sqrt(trace);
-		thisPtr->m_x = XsMath_pt25 * s;
+		thisPtr->m_comp.m_x = XsMath_pt25 * s;
 
 		s = XsMath_one / s;
-		thisPtr->m_w = (XsMatrix_value(ori, 1, 2) - XsMatrix_value(ori, 2, 1)) * s;
-		thisPtr->m_y = (XsMatrix_value(ori, 0, 1) + XsMatrix_value(ori, 1, 0)) * s;
-		thisPtr->m_z = (XsMatrix_value(ori, 2, 0) + XsMatrix_value(ori, 0, 2)) * s;
+		thisPtr->m_comp.m_w = (XsMatrix_value(ori, 1, 2) - XsMatrix_value(ori, 2, 1)) * s;
+		thisPtr->m_comp.m_y = (XsMatrix_value(ori, 0, 1) + XsMatrix_value(ori, 1, 0)) * s;
+		thisPtr->m_comp.m_z = (XsMatrix_value(ori, 2, 0) + XsMatrix_value(ori, 0, 2)) * s;
 	}
 	else if (XsMatrix_value(ori, 1, 1) > XsMatrix_value(ori, 2, 2))
 	{
 		trace = XsMath_one + XsMatrix_value(ori, 1, 1) - XsMatrix_value(ori, 0, 0) - XsMatrix_value(ori, 2, 2);
 		s = XsMath_two * sqrt(trace);
-		thisPtr->m_y = XsMath_pt25 * s;
+		thisPtr->m_comp.m_y = XsMath_pt25 * s;
 
 		s = XsMath_one / s;
-		thisPtr->m_w = (XsMatrix_value(ori, 2, 0) - XsMatrix_value(ori, 0, 2)) * s;
-		thisPtr->m_x = (XsMatrix_value(ori, 0, 1) + XsMatrix_value(ori, 1, 0)) * s;
-		thisPtr->m_z = (XsMatrix_value(ori, 1, 2) + XsMatrix_value(ori, 2, 1)) * s;
+		thisPtr->m_comp.m_w = (XsMatrix_value(ori, 2, 0) - XsMatrix_value(ori, 0, 2)) * s;
+		thisPtr->m_comp.m_x = (XsMatrix_value(ori, 0, 1) + XsMatrix_value(ori, 1, 0)) * s;
+		thisPtr->m_comp.m_z = (XsMatrix_value(ori, 1, 2) + XsMatrix_value(ori, 2, 1)) * s;
 	}
 	else
 	{
 		trace = XsMath_one + XsMatrix_value(ori, 2, 2) - XsMatrix_value(ori, 0, 0) - XsMatrix_value(ori, 1, 1);
 		s = XsMath_two * sqrt(trace);
-		thisPtr->m_z = XsMath_pt25 * s;
+		thisPtr->m_comp.m_z = XsMath_pt25 * s;
 
 		s = XsMath_one / s;
-		thisPtr->m_w = (XsMatrix_value(ori, 0, 1) - XsMatrix_value(ori, 1, 0)) * s;
-		thisPtr->m_x = (XsMatrix_value(ori, 2, 0) + XsMatrix_value(ori, 0, 2)) * s;
-		thisPtr->m_y = (XsMatrix_value(ori, 1, 2) + XsMatrix_value(ori, 2, 1)) * s;
+		thisPtr->m_comp.m_w = (XsMatrix_value(ori, 0, 1) - XsMatrix_value(ori, 1, 0)) * s;
+		thisPtr->m_comp.m_x = (XsMatrix_value(ori, 2, 0) + XsMatrix_value(ori, 0, 2)) * s;
+		thisPtr->m_comp.m_y = (XsMatrix_value(ori, 1, 2) + XsMatrix_value(ori, 2, 1)) * s;
 	}
 
 	XsQuaternion_inverse(thisPtr, thisPtr);
@@ -256,20 +256,20 @@ const XsQuaternion* XsQuaternion_identity(void)
 /*! \relates XsQuaternion \brief Multiply \a left quaternion with \a right quaternion and put the result in \a dest. The parameters may point to the same XsQuaternion(s). */
 void XsQuaternion_multiply(const XsQuaternion* left, const XsQuaternion* right, XsQuaternion* dest)
 {
-	XsReal qa0 = left->m_w;
-	XsReal qa1 = left->m_x;
-	XsReal qa2 = left->m_y;
-	XsReal qa3 = left->m_z;
+	XsReal qa0 = left->m_comp.m_w;
+	XsReal qa1 = left->m_comp.m_x;
+	XsReal qa2 = left->m_comp.m_y;
+	XsReal qa3 = left->m_comp.m_z;
 
-	XsReal qb0 = right->m_w;
-	XsReal qb1 = right->m_x;
-	XsReal qb2 = right->m_y;
-	XsReal qb3 = right->m_z;
+	XsReal qb0 = right->m_comp.m_w;
+	XsReal qb1 = right->m_comp.m_x;
+	XsReal qb2 = right->m_comp.m_y;
+	XsReal qb3 = right->m_comp.m_z;
 
-	dest->m_w = qa0 * qb0 - qa1 * qb1 - qa2 * qb2 - qa3 * qb3;
-	dest->m_x = qa1 * qb0 + qa0 * qb1 - qa3 * qb2 + qa2 * qb3;
-	dest->m_y = qa2 * qb0 + qa3 * qb1 + qa0 * qb2 - qa1 * qb3;
-	dest->m_z = qa3 * qb0 - qa2 * qb1 + qa1 * qb2 + qa0 * qb3;
+	dest->m_comp.m_w = qa0 * qb0 - qa1 * qb1 - qa2 * qb2 - qa3 * qb3;
+	dest->m_comp.m_x = qa1 * qb0 + qa0 * qb1 - qa3 * qb2 + qa2 * qb3;
+	dest->m_comp.m_y = qa2 * qb0 + qa3 * qb1 + qa0 * qb2 - qa1 * qb3;
+	dest->m_comp.m_z = qa3 * qb0 - qa2 * qb1 + qa1 * qb2 + qa0 * qb3;
 }
 
 /*! \relates XsQuaternion \brief Swap the contents of \a a and \a b
@@ -290,20 +290,20 @@ void XsQuaternion_swap(XsQuaternion* a, XsQuaternion* b)
 */
 void XsQuaternion_copy(XsQuaternion* copy, XsQuaternion const* src)
 {
-	copy->m_w = src->m_w;
-	copy->m_x = src->m_x;
-	copy->m_y = src->m_y;
-	copy->m_z = src->m_z;
+	copy->m_comp.m_w = src->m_comp.m_w;
+	copy->m_comp.m_x = src->m_comp.m_x;
+	copy->m_comp.m_y = src->m_comp.m_y;
+	copy->m_comp.m_z = src->m_comp.m_z;
 }
 
 /*! \relates XsQuaternion \brief returns non-zero if \a a and \a b are numerically equal
 */
 int XsQuaternion_equal(XsQuaternion const* a, XsQuaternion const* b)
 {
-	return (a->m_w == b->m_w &&
-			a->m_x == b->m_x &&
-			a->m_y == b->m_y &&
-			a->m_z == b->m_z) ? 1 : 0;
+	return (a->m_comp.m_w == b->m_comp.m_w &&
+			a->m_comp.m_x == b->m_comp.m_x &&
+			a->m_comp.m_y == b->m_comp.m_y &&
+			a->m_comp.m_z == b->m_comp.m_z) ? 1 : 0;
 }
 
 /*! \brief Checks whether \a a and \a b are equal with tolerance \a tolerance
@@ -342,10 +342,10 @@ int XsQuaternion_compare(XsQuaternion const* thisPtr, XsQuaternion const* other,
 */
 XsReal XsQuaternion_dotProduct(XsQuaternion const* thisPtr, XsQuaternion const* other)
 {
-	return	(thisPtr->m_w * other->m_w) +
-			(thisPtr->m_x * other->m_x) +
-			(thisPtr->m_y * other->m_y) +
-			(thisPtr->m_z * other->m_z);
+	return	(thisPtr->m_comp.m_w * other->m_comp.m_w) +
+			(thisPtr->m_comp.m_x * other->m_comp.m_x) +
+			(thisPtr->m_comp.m_y * other->m_comp.m_y) +
+			(thisPtr->m_comp.m_z * other->m_comp.m_z);
 }
 
 /*! @} */

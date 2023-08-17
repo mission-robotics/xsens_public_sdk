@@ -69,6 +69,8 @@
 	#include <ostream>
 #endif
 
+#include "xscontrollerconfig.h"
+
 /*!	\addtogroup enums Global enumerations
 	@{
 */

@@ -560,11 +560,11 @@ JLENUMEXPANDERBITS(XsOption,
 	JLENUMCASEBITSNONE(XSO_None)
 )
 
-static void forceEnumExpanderInclusion()
-{
-	volatile bool blah = false;
-	JLWRITEG("blah" << XRV_OK << blah);
-	JLWRITEG("blah" << XMID_AcceptMtw << blah);
-	JLWRITEG("blah" << XSO_None << blah);
-	(void) blah;
-}
+// static void forceEnumExpanderInclusion()
+// {
+// 	volatile bool blah = false;
+// 	JLWRITEG("blah" << XRV_OK << blah);
+// 	JLWRITEG("blah" << XMID_AcceptMtw << blah);
+// 	JLWRITEG("blah" << XSO_None << blah);
+// 	(void) blah;
+// }

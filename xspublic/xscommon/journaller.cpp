@@ -69,6 +69,7 @@
 
 #include <map>
 #include <fstream>
+#include <xstypes/xsens_compat.h>
 #include <xstypes/xstime.h>
 #include <xstypes/pstdint.h>	// for PRINTF_INT64_MODIFIER
 #include <xstypes/xsthread.h>	// for xsGetCurrentThreadId

@@ -283,7 +283,7 @@ bool xsEnumerateUsbDevices(XsPortInfoArray& ports)
 				libUsb.get_device_address(device));
 			current.setPortName(name);
 
-			int id = 0;
+			uint32_t id = 0;
 			sscanf((const char*)serialNumber, "%X", &id);
 			current.setDeviceId((uint32_t) id);
 			current.setVidPid(desc.idVendor, desc.idProduct);
