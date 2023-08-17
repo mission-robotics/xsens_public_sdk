@@ -13,3 +13,11 @@ make -j
 
 ./build/mti_recv
 ```
+
+### Building with colcon
+```bash
+source /opt/ros/iron/setup.bash 
+colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=1
+
+./install/xsens_public_sdk/bin/mti_recv
+```
