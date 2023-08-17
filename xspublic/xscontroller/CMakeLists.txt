@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 project(xscontroller C CXX)
 
+find_package(PkgConfig REQUIRED)
+pkg_search_module(LIBUSB REQUIRED libusb)
+
 # ==============================================
 # Targets
 
@@ -21,11 +24,18 @@ target_include_directories(xscontroller
 PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
   $<INSTALL_INTERFACE:include>
+  ${LIBUSB_INCLUDE_DIRS}
+)
+
+target_link_directories(xscontroller 
+PUBLIC 
+  ${LIBUSB_LIBRARY_DIRS} 
 )
 
 target_link_libraries(xscontroller
 PUBLIC
     xscommon
+    ${LIBUSB_LIBRARIES}
 )
 
 target_compile_options(xscontroller 
@@ -33,7 +43,7 @@ PUBLIC
   -Wall 
   -Wextra 
   -Wpedantic
-  -Wno-address-of-packed-member
+  -Wno-unused-function
 )
 
 target_compile_definitions(xscontroller
