@@ -117,6 +117,18 @@ struct XsByteArray : public XsArrayImpl<uint8_t, g_xsByteArrayDescriptor, XsByte
 	{
 	}
 
+	//! \brief Copy assigns an XsByteArray that references the data supplied in \a ref
+	inline XsByteArray& operator=(const XsByteArray& other) 
+	{
+		// Check for self-assignment
+		if (this != &other)
+		{
+			// Call base class assignment operator
+			ArrayImpl::operator=(other);  
+		}
+		return *this;
+	}
+
 #ifndef SWIG
 	/*! \brief Swap the contents the \a first and \a second array */
 	friend void swap(XsByteArray& first, XsByteArray& second)

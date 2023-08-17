@@ -126,6 +126,25 @@ struct XsFilterProfile
 		setLabel(other.m_label);
 	}
 
+	/*! \brief Copy assignment operator for a filter profile object
+		\param other the filter profile object to assign a copy of
+	*/
+	XsFilterProfile& operator=(const XsFilterProfile& other) 
+	{
+		// Check for self-assignment
+		if (this != &other)
+        {
+			m_type = other.m_type;
+			m_version = other.m_version;
+			m_filterType = other.m_filterType;
+			m_filterMajor = other.m_filterMajor;
+			m_filterMinor = other.m_filterMinor;
+			setKind( other.m_kind );
+			setLabel( other.m_label );
+		}
+		return *this;
+	}
+
 	/*! \brief Destroy the filter profile */
 	~XsFilterProfile() {}
 
