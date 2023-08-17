@@ -109,6 +109,18 @@ XSTYPES_DLL_API void XsFilterProfileArray_construct(XsFilterProfileArray* thisPt
 		{
 		}
 
+		//! \brief Copy assigns an XsFilterProfileArray that references the data supplied in \a ref
+		inline XsFilterProfileArray& operator=(const XsFilterProfileArray& other) 
+		{
+			// Check for self-assignment
+			if (this != &other)
+			{
+				// Call base class assignment operator
+				ArrayImpl::operator=(other);  
+			}
+			return *this;
+		}
+
 #ifndef SWIG
 		/*! \brief Swap the contents the \a first and \a second array */
 		friend void swap(XsFilterProfileArray& first, XsFilterProfileArray& second)

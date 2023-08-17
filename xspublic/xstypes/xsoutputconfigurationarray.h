@@ -107,6 +107,18 @@ struct XsOutputConfigurationArray : public XsArrayImpl<XsOutputConfiguration, g_
 	{
 	}
 
+	//! \brief Copy assigns an XsOutputConfigurationArray that references the data supplied in \a ref
+	inline XsOutputConfigurationArray& operator=(const XsOutputConfigurationArray& other) 
+	{
+		// Check for self-assignment
+		if (this != &other)
+		{
+			// Call base class assignment operator
+			ArrayImpl::operator=(other);  
+		}
+		return *this;
+	}
+
 #ifndef SWIG
 	/*! \brief Swap the contents the \a first and \a second array */
 	friend void swap(XsOutputConfigurationArray& first, XsOutputConfigurationArray& second)

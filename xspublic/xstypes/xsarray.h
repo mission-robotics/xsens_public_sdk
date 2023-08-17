@@ -576,6 +576,17 @@ public:
 		inline IteratorImpl(T* p) : ParentType(p) {}
 		//! \brief Copy constructor
 		inline IteratorImpl(const IteratorImpl& i) : ParentType(i) {}
+		//! \brief Copy assignment
+		inline IteratorImpl& operator=(const IteratorImpl& other) 
+		{
+			// Check for self-assignment
+			if (this != &other)
+			{
+				// Call base class assignment operator
+				ParentType::operator=(other);  
+			}
+			return *this;
+		}
 	};
 
 	/*! \brief A const iterator implementation */
