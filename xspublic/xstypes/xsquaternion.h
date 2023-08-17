@@ -99,37 +99,33 @@ XSTYPES_DLL_API XsReal XsQuaternion_dotProduct(XsQuaternion const* thisPtr, XsQu
 } // extern "C"
 #endif
 
+typedef struct
+{
+	XsReal m_w;		//!< Stores the w component of the quaternion
+	XsReal m_x;		//!< Stores the x component of the quaternion
+	XsReal m_y;		//!< Stores the y component of the quaternion
+	XsReal m_z;		//!< Stores the z component of the quaternion
+} XsQuaternionComponents;
+
 struct XsQuaternion
 {
 	XSCPPPROTECTED
 	union
 	{
-		struct
-		{
-			XsReal m_w;		//!< Stores the w component of the quaternion
-			XsReal m_x;		//!< Stores the x component of the quaternion
-			XsReal m_y;		//!< Stores the y component of the quaternion
-			XsReal m_z;		//!< Stores the z component of the quaternion
-		};
+		XsQuaternionComponents m_comp;
 		XsReal m_data[4];	//!< Stores the quaternion in an array of four elements
 	};
 #ifdef __cplusplus
 public:
 	//! \brief Construct a quaternion with the supplied values, or zero's by default
 	inline explicit XsQuaternion(XsReal w_ = XsMath_zero, XsReal x_ = XsMath_zero, XsReal y_ = XsMath_zero, XsReal z_ = XsMath_zero)
-		: m_w(w_)
-		, m_x(x_)
-		, m_y(y_)
-		, m_z(z_)
+		: m_comp{ w_, x_, y_, z_ }
 	{
 	}
 
 	//! \brief Construct a quaternion with the supplied values, or zero's by default and optionally normalize
 	inline explicit XsQuaternion(XsReal w_, XsReal x_, XsReal y_, XsReal z_, bool normalize_)
-		: m_w(w_)
-		, m_x(x_)
-		, m_y(y_)
-		, m_z(z_)
+		: m_comp{ w_, x_, y_, z_ }
 	{
 		if (normalize_)
 			normalize();
@@ -137,19 +133,13 @@ public:
 
 	//! \brief Construct a quaternion with the supplied values from the \a other Quaternion
 	inline XsQuaternion(const XsQuaternion& other)
-		: m_w(other.m_w)
-		, m_x(other.m_x)
-		, m_y(other.m_y)
-		, m_z(other.m_z)
+		: m_comp{ other.m_comp.m_w, other.m_comp.m_x, other.m_comp.m_y, other.m_comp.m_z }
 	{}
 
 #if !defined(SWIG) && !defined(__ADSP21000__)
 	//! \brief Move-construct a quaternion with the supplied values from the \a other Quaternion
 	inline XsQuaternion(XsQuaternion&& other)
-		: m_w(other.m_w)
-		, m_x(other.m_x)
-		, m_y(other.m_y)
-		, m_z(other.m_z)
+		: m_comp{ other.m_comp.m_w, other.m_comp.m_x, other.m_comp.m_y, other.m_comp.m_z }
 	{}
 #endif
 
@@ -175,10 +165,10 @@ public:
 	{
 		if (this != &other)
 		{
-			m_w = other.m_w;
-			m_x = other.m_x;
-			m_y = other.m_y;
-			m_z = other.m_z;
+			m_comp.m_w = other.m_comp.m_w;
+			m_comp.m_x = other.m_comp.m_x;
+			m_comp.m_y = other.m_comp.m_y;
+			m_comp.m_z = other.m_comp.m_z;
 		}
 		return *this;
 	}
@@ -187,10 +177,10 @@ public:
 	*/
 	inline void assign(XsReal w_, XsReal x_, XsReal y_, XsReal z_)
 	{
-		m_w = w_;
-		m_x = x_;
-		m_y = y_;
-		m_z = z_;
+		m_comp.m_w = w_;
+		m_comp.m_x = x_;
+		m_comp.m_y = y_;
+		m_comp.m_z = z_;
 	}
 
 	/*! \brief Set the Quaternion to the specific values in the supplied array.
@@ -302,42 +292,42 @@ public:
 	//! \brief Return the w component of the quaternion
 	inline XsReal w() const
 	{
-		return m_w;
+		return m_comp.m_w;
 	}
 	//! \brief Return the x component of the quaternion
 	inline XsReal x() const
 	{
-		return m_x;
+		return m_comp.m_x;
 	}
 	//! \brief Return the y component of the quaternion
 	inline XsReal y() const
 	{
-		return m_y;
+		return m_comp.m_y;
 	}
 	//! \brief Return the z component of the quaternion
 	inline XsReal z() const
 	{
-		return m_z;
+		return m_comp.m_z;
 	}
 	//! \brief Return a reference to the w component of the quaternion
 	inline XsReal& w()
 	{
-		return m_w;
+		return m_comp.m_w;
 	}
 	//! \brief Return a reference to the x component of the quaternion
 	inline XsReal& x()
 	{
-		return m_x;
+		return m_comp.m_x;
 	}
 	//! \brief Return a reference to the y component of the quaternion
 	inline XsReal& y()
 	{
-		return m_y;
+		return m_comp.m_y;
 	}
 	//! \brief Return a reference to the z component of the quaternion
 	inline XsReal& z()
 	{
-		return m_z;
+		return m_comp.m_z;
 	}
 
 	//! \brief Swap the contents with \a other
@@ -355,10 +345,10 @@ public:
 	//! \brief Returns true if \a other is numerically identical to this
 	inline bool operator ==(const XsQuaternion& other) const
 	{
-		return	m_w == other.m_w &&
-				m_x == other.m_x &&
-				m_y == other.m_y &&
-				m_z == other.m_z;
+		return	m_comp.m_w == other.m_comp.m_w &&
+				m_comp.m_x == other.m_comp.m_x &&
+				m_comp.m_y == other.m_comp.m_y &&
+				m_comp.m_z == other.m_comp.m_z;
 	}
 
 	/*! \brief Returns true if the fields of this and \a other are within \a tolerance of each other

@@ -92,11 +92,11 @@ JLENUMEXPANDER(XsConnectivityState,
 	JLENUMCASE(XCS_Unknown)
 )
 
-static void forceEnumExpanderInclusion()
-{
-	volatile bool blah = false;
-	JLWRITEG("blah" << XDS_Initial << blah);
-	JLWRITEG("blah" << XOP_Unknown << blah);
-	JLWRITEG("blah" << XCS_File << blah);
-	(void)blah;
-}
+// static void forceEnumExpanderInclusion()
+// {
+// 	volatile bool blah = false;
+// 	JLWRITEG("blah" << XDS_Initial << blah);
+// 	JLWRITEG("blah" << XOP_Unknown << blah);
+// 	JLWRITEG("blah" << XCS_File << blah);
+// 	(void)blah;
+// }

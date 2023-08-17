@@ -123,6 +123,8 @@ void XsVersion_fromString(XsVersion* thisPtr, const XsString* version)
 	int build = 0;
 	int reposVersion = 0;
 	int result;
+
+	intmax_t count_temp = 0;
 	size_t count = 0;
 
 	assert(thisPtr);
@@ -135,7 +137,8 @@ void XsVersion_fromString(XsVersion* thisPtr, const XsString* version)
 	if (!version || XsString_empty(version))
 		return;
 
-	result = sscanf(version->m_data, "%d.%d.%d build %d rev %d%zn", &major, &minor, &revision, &build, &reposVersion, &count);
+	result = sscanf(version->m_data, "%d.%d.%d build %d rev %d%jn", &major, &minor, &revision, &build, &reposVersion, &count_temp);
+	count = (size_t)count_temp;
 
 	if (result > 0)
 	{

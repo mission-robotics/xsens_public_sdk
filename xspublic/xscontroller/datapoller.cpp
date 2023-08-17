@@ -64,6 +64,7 @@
 
 #include "datapoller.h"
 #include "dataparser.h"
+#include "xscontrollerconfig.h"
 
 /*! \brief Create a DataPoller with a \a parser */
 
@@ -104,7 +105,7 @@ void DataPoller::initFunction()
 {
 	setPriority(XS_THREAD_PRIORITY_HIGHER);
 	char buffer[128];
-	sprintf(buffer, "XDA %s Poller %p", m_parser.parserType(), &m_parser);
+	sprintf(buffer, "XDA %s Poller %p", m_parser.parserType(), reinterpret_cast<void*>( &m_parser ) );
 	xsNameThisThread(buffer);
 }
 

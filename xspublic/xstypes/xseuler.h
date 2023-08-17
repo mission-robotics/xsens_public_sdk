@@ -89,17 +89,29 @@ XSTYPES_DLL_API void XsEuler_fromQuaternion(struct XsEuler* thisPtr, const struc
 } // extern "C"
 #endif
 
+typedef struct {
+	XsReal m_x;		//!< Stores the x component of the euler triplet
+	XsReal m_y;		//!< Stores the y component of the euler triplet
+	XsReal m_z;		//!< Stores the z component of the euler triplet
+} XsEulerCompXYZ;
+
+typedef struct {
+	XsReal m_roll;		//!< Stores the roll component of the euler triplet
+	XsReal m_pitch;		//!< Stores the pitch component of the euler triplet
+	XsReal m_yaw;		//!< Stores the yaw component of the euler triplet
+} XsEulerCompRPY;
+
 struct XsEuler
 {
 #ifdef __cplusplus
 	//! \brief Constructor that creates an Euler object with all angles 0
-	inline XsEuler() : m_x(XsMath_zero), m_y(XsMath_zero), m_z(XsMath_zero) {}
+	inline XsEuler() : m_xyz{ XsMath_zero, XsMath_zero, XsMath_zero } {}
 	//! \brief Constructor that creates an Euler object the specified angles
-	inline XsEuler(XsReal x_, XsReal y_, XsReal z_) : m_x(x_), m_y(y_), m_z(z_) {}
+	inline XsEuler(XsReal x_, XsReal y_, XsReal z_) : m_xyz{ x_, y_, z_ } {}
 	//! \brief Constructor that creates an Euler object from \a other
-	inline XsEuler(const XsEuler& other) : m_x(other.m_x), m_y(other.m_y), m_z(other.m_z) {}
+	inline XsEuler(const XsEuler& other) : m_xyz{ other.m_xyz.m_x, other.m_xyz.m_y, other.m_xyz.m_z } {}
 	//! \brief Constructor that creates an Euler object from \a other
-	inline explicit XsEuler(const XsVector& other) : m_x(other[0]), m_y(other[1]), m_z(other[2]) {}
+	inline explicit XsEuler(const XsVector& other) : m_xyz{ other[0], other[1], other[2] } {}
 
 	//! \brief \copybrief XsEuler_fromQuaternion
 	inline explicit XsEuler(const XsQuaternion& q)
@@ -110,9 +122,9 @@ struct XsEuler
 	//! \brief Assigns the \a other XsEuler object to this one
 	inline XsEuler& operator=(const XsEuler& other)
 	{
-		m_x = other.m_x;
-		m_y = other.m_y;
-		m_z = other.m_z;
+		m_xyz.m_x = other.m_xyz.m_x;
+		m_xyz.m_y = other.m_xyz.m_y;
+		m_xyz.m_z = other.m_xyz.m_z;
 		return *this;
 	}
 
@@ -133,7 +145,7 @@ struct XsEuler
 	//! \brief Returns true if all angles in this object are zero
 	inline bool empty() const
 	{
-		return m_x == XsMath_zero && m_y == XsMath_zero && m_z == XsMath_zero;
+		return m_xyz.m_x == XsMath_zero && m_xyz.m_y == XsMath_zero && m_xyz.m_z == XsMath_zero;
 	}
 
 	//! \brief Return a const pointer to the internal data
@@ -153,73 +165,62 @@ struct XsEuler
 	*/
 	inline bool operator == (const XsEuler& other) const
 	{
-		return m_roll == other.m_roll && m_pitch == other.m_pitch && m_yaw == other.m_yaw;
+		return m_rpy.m_roll == other.m_rpy.m_roll && m_rpy.m_pitch == other.m_rpy.m_pitch && m_rpy.m_yaw == other.m_rpy.m_yaw;
 	}
 
 	/*! \brief Returns true if the values in \a other are different from this
 	*/
 	inline bool operator != (const XsEuler& other) const
 	{
-		return m_roll != other.m_roll || m_pitch != other.m_pitch || m_yaw != other.m_yaw;
+		return m_rpy.m_roll != other.m_rpy.m_roll || m_rpy.m_pitch != other.m_rpy.m_pitch || m_rpy.m_yaw != other.m_rpy.m_yaw;
 	}
 
 	//! \brief Returns the roll or x value
 	inline XsReal roll() const
 	{
-		return m_roll;
+		return m_rpy.m_roll;
 	}
 	//! \brief Returns the pitch or y value
 	inline XsReal pitch() const
 	{
-		return m_pitch;
+		return m_rpy.m_pitch;
 	}
 	//! \brief Returns the yaw or z value
 	inline XsReal yaw() const
 	{
-		return m_yaw;
+		return m_rpy.m_yaw;
 	}
 
 	//! \brief Returns the x or roll value
 	inline XsReal x() const
 	{
-		return m_x;
+		return m_xyz.m_x;
 	}
 	//! \brief Returns the y or pitch value
 	inline XsReal y() const
 	{
-		return m_y;
+		return m_xyz.m_y;
 	}
 	//! \brief Returns the z or yaw value
 	inline XsReal z() const
 	{
-		return m_z;
+		return m_xyz.m_z;
 	}
 
 	//! \brief Returns true if the values of this and \a other are within \a tolerance of each other
 	inline bool isEqual(const XsEuler& other, XsReal tolerance) const
 	{
-		return	fabs(m_x - other.m_x) <= tolerance &&
-			fabs(m_y - other.m_y) <= tolerance &&
-			fabs(m_z - other.m_z) <= tolerance;
+		return	fabs(m_xyz.m_x - other.m_xyz.m_x) <= tolerance &&
+			fabs(m_xyz.m_y - other.m_xyz.m_y) <= tolerance &&
+			fabs(m_xyz.m_z - other.m_xyz.m_z) <= tolerance;
 	}
 
 private:
 #endif
-
 	union
 	{
-		struct
-		{
-			XsReal m_x;		//!< Stores the x component of the euler triplet
-			XsReal m_y;		//!< Stores the y component of the euler triplet
-			XsReal m_z;		//!< Stores the z component of the euler triplet
-		};
-		struct
-		{
-			XsReal m_roll;		//!< Stores the roll component of the euler triplet
-			XsReal m_pitch;		//!< Stores the pitch component of the euler triplet
-			XsReal m_yaw;		//!< Stores the yaw component of the euler triplet
-		};
+		XsEulerCompXYZ m_xyz;
+		XsEulerCompRPY m_rpy;
 		XsReal m_data[3];	//!< Stores the euler triplet in an array of three elements
 	};
 };

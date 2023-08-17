@@ -84,9 +84,9 @@
 */
 void XsEuler_destruct(XsEuler* thisPtr)
 {
-	thisPtr->m_x = XsMath_zero;
-	thisPtr->m_y = XsMath_zero;
-	thisPtr->m_z = XsMath_zero;
+	thisPtr->m_xyz.m_x = XsMath_zero;
+	thisPtr->m_xyz.m_y = XsMath_zero;
+	thisPtr->m_xyz.m_z = XsMath_zero;
 }
 
 /*! \relates XsEuler
@@ -94,7 +94,7 @@ void XsEuler_destruct(XsEuler* thisPtr)
 */
 int XsEuler_empty(const XsEuler* thisPtr)
 {
-	return thisPtr->m_x == XsMath_zero && thisPtr->m_y == XsMath_zero && thisPtr->m_z == XsMath_zero;
+	return thisPtr->m_xyz.m_x == XsMath_zero && thisPtr->m_xyz.m_y == XsMath_zero && thisPtr->m_xyz.m_z == XsMath_zero;
 }
 
 /*! \relates XsEuler
@@ -110,13 +110,13 @@ void XsEuler_fromQuaternion(XsEuler* thisPtr, const XsQuaternion* quat)
 		return;
 	}
 
-	sqw = quat->m_w * quat->m_w;
-	dphi = XsMath_two * (sqw + quat->m_z * quat->m_z) - XsMath_one;
-	dpsi = XsMath_two * (sqw + quat->m_x * quat->m_x) - XsMath_one;
+	sqw = quat->m_comp.m_w * quat->m_comp.m_w;
+	dphi = XsMath_two * (sqw + quat->m_comp.m_z * quat->m_comp.m_z) - XsMath_one;
+	dpsi = XsMath_two * (sqw + quat->m_comp.m_x * quat->m_comp.m_x) - XsMath_one;
 
-	thisPtr->m_x =  XsMath_rad2deg(atan2(XsMath_two * (quat->m_y * quat->m_z + quat->m_w * quat->m_x), dphi));
-	thisPtr->m_y = -XsMath_rad2deg(XsMath_asinClamped(XsMath_two * (quat->m_x * quat->m_z - quat->m_w * quat->m_y)));
-	thisPtr->m_z =  XsMath_rad2deg(atan2(XsMath_two * (quat->m_x * quat->m_y + quat->m_w * quat->m_z), dpsi));
+	thisPtr->m_xyz.m_x =  XsMath_rad2deg(atan2(XsMath_two * (quat->m_comp.m_y * quat->m_comp.m_z + quat->m_comp.m_w * quat->m_comp.m_x), dphi));
+	thisPtr->m_xyz.m_y = -XsMath_rad2deg(XsMath_asinClamped(XsMath_two * (quat->m_comp.m_x * quat->m_comp.m_z - quat->m_comp.m_w * quat->m_comp.m_y)));
+	thisPtr->m_xyz.m_z =  XsMath_rad2deg(atan2(XsMath_two * (quat->m_comp.m_x * quat->m_comp.m_y + quat->m_comp.m_w * quat->m_comp.m_z), dpsi));
 }
 
 /*! @} */
