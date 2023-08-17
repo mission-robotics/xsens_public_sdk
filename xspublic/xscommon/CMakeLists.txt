@@ -33,7 +33,7 @@ PUBLIC
   -Wall 
   -Wextra 
   -Wpedantic
-  -Wno-address-of-packed-member
+  -Wno-unused-function
 )
 
 target_compile_features(xscommon
