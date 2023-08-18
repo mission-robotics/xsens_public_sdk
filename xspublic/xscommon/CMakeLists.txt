@@ -1,6 +1,3 @@
-cmake_minimum_required(VERSION 3.15)
-project(xscommon C CXX)
-
 # ==============================================
 # Targets
 
@@ -42,13 +39,25 @@ PUBLIC
   cxx_std_17
 )
 
+# Create a pseudo-target that other targets (i.e. examples, tests) can depend
+# on and can also be provided as import-target by a package-file when building
+# those targets outside the regular build-tree (i.e. the installed tree)
+add_library(${PROJECT_NAME}::xscommon ALIAS xscommon)
+
 # ==============================================
 # Install
 
-install( FILES ${XSCOMMON_PUBLIC_HEADERS} DESTINATION include/xscommon )
+# Headers
+install( 
+  FILES ${XSCOMMON_PUBLIC_HEADERS} 
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/xscommon
+  COMPONENT dev )
+
+# Binaries
 install(
   TARGETS xscommon
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin
+  EXPORT "${PROJECT_NAME}"
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT lib
+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT lib
+  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT lib
 )
