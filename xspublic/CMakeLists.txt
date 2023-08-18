@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(xspublic C CXX)
+project(xsens_public_sdk C CXX)
 
 add_subdirectory(xstypes)
 add_subdirectory(xscommon)

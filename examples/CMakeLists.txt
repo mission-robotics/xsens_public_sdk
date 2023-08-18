@@ -11,8 +11,6 @@ add_executable( mti_recv
 target_link_libraries( mti_recv
 PUBLIC
   xscontroller
-  xscommon
-  xstypes
 )
 
 target_compile_options( mti_recv
