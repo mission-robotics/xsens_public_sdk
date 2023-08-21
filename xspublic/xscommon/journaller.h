@@ -295,7 +295,11 @@ inline static constexpr char const* jlStrippedPathFile(char const* a)
 #endif
 
 #ifndef _lint	//pclint defines this
-	#define JLIF(journal, level, todo)	do { if (journal && journal->logLevel(level)) { todo; } } while(0)
+	#ifdef HAVE_JOURNALLER
+		#define JLIF(journal, level, todo)	do { if (journal && journal->logLevel(level)) { todo; } } while(0)
+	#else
+		#define JLIF(...)	((void)0)
+	#endif
 #else
 	#define JLIF(...)	((void)0)
 #endif
