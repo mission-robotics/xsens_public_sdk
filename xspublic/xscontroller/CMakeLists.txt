@@ -48,7 +48,6 @@ PUBLIC
 
 target_compile_definitions(xscontroller
 PUBLIC
-    -DHAVE_JOURNALLER
     -DHAVE_LIBUSB
 )
 
